@@ -14,5 +14,8 @@ tests/**/coverage/
 *.ntvs*
 *.njsproj
 *.sln
+
 venv*
 
+uvloop*
+*.tar.gz
