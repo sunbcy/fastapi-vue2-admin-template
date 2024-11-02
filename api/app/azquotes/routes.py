@@ -70,6 +70,14 @@ def deliver_quotes_to_qiyeweixin(quotes):
 
 
 class AsyncQuotesBot:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+            cls._instance.session = aiohttp.ClientSession()
+        return cls._instance
+
     def __init__(self, proxy=check_proxy()):
         self.quote_main_url = "https://azquotes.com"
         self.quote_main_url_headers = {
@@ -79,12 +87,15 @@ class AsyncQuotesBot:
         self.connector = aiohttp.TCPConnector(limit=10)  # 设置连接池大小
 
     async def fetch(self):
-        connector = None
+        # connector = None
+        # if self.proxy:
+        #     connector = aiohttp.TCPConnector(ssl=False)
+        kwargs = {}
         if self.proxy:
-            connector = aiohttp.TCPConnector(ssl=False)
+            kwargs['proxy'] = self.proxy
 
         async with aiohttp.ClientSession(connector=self.connector) as session:
-            async with session.get(self.quote_main_url, headers=self.quote_main_url_headers, proxy=self.proxy) as response:
+            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers,  **kwargs) as response:  # proxy=self.proxy
                 return await response.text()
 
     async def get_today_quote(self):
