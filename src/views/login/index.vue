@@ -4,7 +4,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">缥缈峰</h3>
+        <h3 class="title" style="color: #3630f8">缥缈峰</h3>
       </div>
 
       <el-form-item prop="username">
@@ -242,11 +242,11 @@ $light_gray:#eee;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('login_logos.jpg');
+  background-image: url('login_logo2.jpg');
   background-size: cover;
   background-position: center;
   z-index: -1;
-  opacity: 0.9; /* 添加这行设置透明度为 50% */
+  opacity: 0.7; /* 添加这行设置透明度为 50% */
 }
 
 //@media (max-width: 768px) {

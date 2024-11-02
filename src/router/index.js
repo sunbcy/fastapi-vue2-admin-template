@@ -62,12 +62,12 @@ export const constantRoutes = [
     name: 'Book',
     meta: { title: '图书管理', icon: 'el-icon-s-help' },
     children: [
-      {
-        path: 'author',
-        name: 'author',
-        component: () => import('@/views/author/index'),
-        meta: { title: '作者信息', icon: 'table' }
-      }
+      // {
+      //   path: 'author',
+      //   name: 'author',
+      //   component: () => import('@/views/author/index'),
+      //   meta: { title: '作者信息', icon: 'table' }
+      // }
       // {
       //   path: 'book',
       //   name: 'book',

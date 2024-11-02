@@ -14,6 +14,18 @@ def create_app():
 
     templates = Jinja2Templates(directory="../dist")
 
+    # 注册插件
+    register_routers(app)
+
     return app
 
 
+# def register_routers(app):  # 只有在此处注册的应用才可以自动生成数据表
+#   # 导入 APIRouter
+#   from app.azquotes import azquotes_router
+#   # 包含 APIRouter
+#   app.include_router(azquotes_router, prefix='/api/azquotes', tags=['azquotes'])
+
+def register_routers(app):
+  from app.azquotes import routes as azquotes_routes
+  app.include_router(azquotes_routes.router, prefix='/api/azquotes', tags=['azquotes'])
