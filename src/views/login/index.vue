@@ -1,9 +1,10 @@
 <template>
   <div class="login-container">
+    <div class="login-bg"></div>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">缥缈峰</h3>
       </div>
 
       <el-form-item prop="username">
@@ -43,10 +44,10 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
+<!--      <div class="tips">-->
+<!--        <span style="margin-right:20px;">username: admin</span>-->
+<!--        <span> password: any</span>-->
+<!--      </div>-->
 
     </el-form>
   </div>
@@ -180,7 +181,7 @@ $light_gray:#eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  //background-color: $bg;
   overflow: hidden;
 
   .login-form {
@@ -234,4 +235,23 @@ $light_gray:#eee;
     user-select: none;
   }
 }
+
+.login-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('login_logos.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  opacity: 0.9; /* 添加这行设置透明度为 50% */
+}
+
+//@media (max-width: 768px) {
+// .login-container {
+//    flex-direction: column;
+//  }
+//}
 </style>
