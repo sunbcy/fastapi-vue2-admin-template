@@ -87,9 +87,6 @@ class AsyncQuotesBot:
         self.connector = aiohttp.TCPConnector(limit=10)  # 设置连接池大小
 
     async def fetch(self):
-        # connector = None
-        # if self.proxy:
-        #     connector = aiohttp.TCPConnector(ssl=False)
         kwargs = {}
         if self.proxy:
             kwargs['proxy'] = self.proxy
