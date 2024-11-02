@@ -1,5 +1,7 @@
 # # from app.qiyewechat.routes import QiYeWeChatBot
 from traceback import print_exc
+import asyncio
+import uvloop
 
 import aiohttp
 from app.utils import check_proxy
@@ -8,6 +10,9 @@ from app.utils.responses import response_with
 from fastapi import APIRouter
 from lxml import etree
 
+
+# 使用 uvloop 作为事件循环
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 router = APIRouter()
 
 
@@ -71,13 +76,14 @@ class AsyncQuotesBot:
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36'
         }
         self.proxy = proxy['http']
+        self.connector = aiohttp.TCPConnector(limit=10)  # 设置连接池大小
 
     async def fetch(self):
         connector = None
         if self.proxy:
-          connector = aiohttp.TCPConnector(ssl=False)
+            connector = aiohttp.TCPConnector(ssl=False)
 
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=self.connector) as session:
             async with session.get(self.quote_main_url, headers=self.quote_main_url_headers, proxy=self.proxy) as response:
                 return await response.text()
 

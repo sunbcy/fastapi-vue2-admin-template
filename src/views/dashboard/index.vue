@@ -138,7 +138,7 @@ export default {
     async getQuote() {
       try {
         const res = await getTodayQuote()
-        this.todayQuote = res.searchResults.text
+        this.todayQuote = res.searchResults
         console.log(this.todayQuote)
       } catch (err) {
         console.log(err)
