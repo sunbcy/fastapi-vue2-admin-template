@@ -2,27 +2,27 @@
   <div class="dashboard-container">
     <span> {{ todayQuote }} </span>
 
-<!--    <div class="button-container">-->
-<!--      <el-button type="primary" @click="updateProject">项目更新</el-button>-->
-<!--      <el-button type="primary" @click="compileProject">项目编译</el-button>-->
-<!--      <el-button type="primary" @click="restartProject">项目重启</el-button>-->
-<!--      <el-button type="danger" @click="oneClickRestart">一键重启</el-button>-->
-<!--    </div>-->
-<!--    <el-card>-->
-<!--      <h3>System Information</h3>-->
-<!--      <p><strong>Current Time:</strong> {{ currentTime }}</p>-->
-<!--      <p><strong>System Type:</strong> {{ osType }}-{{ systemType }}</p>-->
-<!--      <p><strong>User Agent:</strong> {{ userAgent }}</p>-->
-<!--      <p><strong>CPU Info:</strong> {{ cpuInfo }}</p>-->
-<!--      <p><strong>Disk Info:</strong>-->
-<!--        <p v-html="formattedInfo"> {{ diskInfo }}</p>-->
-<!--      </p>-->
-<!--      <p><strong>Local IP:</strong> {{ localIP }}</p>-->
-<!--      <p><strong>Wan IP:</strong> {{ wanIP }}</p>-->
-<!--      <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>-->
-<!--      <p><strong>IpInfo:</strong> {{ IpInfo }}</p>-->
-<!--      <p><strong>Location:</strong> {{ Location }}</p>-->
-<!--    </el-card>-->
+    <!--    <div class="button-container">-->
+    <!--      <el-button type="primary" @click="updateProject">项目更新</el-button>-->
+    <!--      <el-button type="primary" @click="compileProject">项目编译</el-button>-->
+    <!--      <el-button type="primary" @click="restartProject">项目重启</el-button>-->
+    <!--      <el-button type="danger" @click="oneClickRestart">一键重启</el-button>-->
+    <!--    </div>-->
+        <el-card>
+          <h3>System Information</h3>
+          <p><strong>Current Time:</strong> {{ currentTime }}</p>
+          <p><strong>System Type:</strong> {{ osType }}-{{ systemType }}</p>
+          <p><strong>User Agent:</strong> {{ userAgent }}</p>
+          <p><strong>CPU Info:</strong> {{ cpuInfo }}</p>
+          <p><strong>Disk Info:</strong>
+            <p v-html="formattedInfo"> {{ diskInfo }}</p>
+          </p>
+          <p><strong>Local IP:</strong> {{ localIP }}</p>
+          <p><strong>Wan IP:</strong> {{ wanIP }}</p>
+          <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>
+          <p><strong>IpInfo:</strong> {{ IpInfo }}</p>
+          <p><strong>Location:</strong> {{ Location }}</p>
+        </el-card>
 
     <component :is="currentRole" />
 
@@ -31,10 +31,10 @@
 
 <script>
 import adminDashboard from './admin'
-// import {get_system_info} from "@/api/system_info";
-// import {update_project} from "@/api/system_info";
-// import {compile_project} from "@/api/system_info";
-// import {restart_project} from "@/api/system_info";
+import { get_system_info } from '@/api/system_info'
+// import { update_project } from '@/api/system_info'
+// import { compile_project } from '@/api/system_info'
+// import { restart_project } from '@/api/system_info'
 import { getTodayQuote } from '@/api/azquotes'
 
 export default {
@@ -58,9 +58,14 @@ export default {
       currentRole: 'adminDashboard'
     }
   },
+  computed: {
+    formattedInfo() {
+      return this.diskInfo.replace(/\n/g, '<br>')
+    }
+  },
   mounted() {
-    // this.updateTime()
-    // this.getSystemInfo()
+    this.updateTime()
+    this.getSystemInfo()
     this.getQuote()
   },
   methods: {
@@ -113,27 +118,26 @@ export default {
 
       this.systemType = os.type()
       this.userAgent = navigator.userAgent
-      // get_system_info()
-      //   .then(res => {
-      //     this.osType = res.searchResults.os_type
-      //     this.cpuInfo = res.searchResults.cpu_info
-      //     this.diskInfo = res.searchResults.disk_info
-      //     this.localIP = res.searchResults.local_ip
-      //     this.wanIP = res.searchResults.wan_ip
-      //     this.Latitude = res.searchResults.latitude
-      //     this.Longitude = res.searchResults.longitude
-      //     this.IpInfo = res.searchResults.ip_info
-      //     this.Location = res.searchResults.location
-      //     // console.log(res.searchResults);  // debug
-      //     if (this.wanIP === 'ip not found!') {
-      //       this.$message.error('服务器可能处于离线模式！请检查网络。。。');
-      //     }
-      //
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //     this.$message.error('服务端异常, 获取失败.');
-      //   });
+      get_system_info()
+        .then(res => {
+          this.osType = res.searchResults.os_type
+          this.cpuInfo = res.searchResults.cpu_info
+          this.diskInfo = res.searchResults.disk_info
+          this.localIP = res.searchResults.local_ip
+          this.wanIP = res.searchResults.wan_ip
+          this.Latitude = res.searchResults.latitude
+          this.Longitude = res.searchResults.longitude
+          this.IpInfo = res.searchResults.ip_info
+          this.Location = res.searchResults.location
+          // console.log(res.searchResults);  // debug
+          if (this.wanIP === 'ip not found!') {
+            this.$message.error('服务器可能处于离线模式！请检查网络。。。')
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          this.$message.error('服务端异常, 获取失败.')
+        })
     },
     async getQuote() {
       try {
@@ -154,11 +158,6 @@ export default {
       //   })
     }
 
-  },
-  computed: {
-    // formattedInfo() {
-    //   return this.diskInfo.replace(/\n/g, '<br>')
-    // }
   }
 }
 </script>

@@ -27,5 +27,8 @@ def create_app():
 #   app.include_router(azquotes_router, prefix='/api/azquotes', tags=['azquotes'])
 
 def register_routers(app):
-  from app.azquotes import routes as azquotes_routes
-  app.include_router(azquotes_routes.router, prefix='/api/azquotes', tags=['azquotes'])
+    from app.azquotes import routes as azquotes_routes
+    app.include_router(azquotes_routes.router, prefix='/api/azquotes', tags=['azquotes'])
+
+    from app.system_info import routes as system_info_routes
+    app.include_router(system_info_routes.router, prefix='/api/system_info', tags=['system_info'])
