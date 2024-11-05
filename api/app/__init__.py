@@ -3,8 +3,8 @@ import datetime
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from utils import responses as resp
-from utils.responses import response_with
+# from utils import responses as resp
+# from utils.responses import response_with
 
 
 def create_app():
@@ -25,3 +25,6 @@ def register_routers(app):  # 只有在此处注册的应用才可以自动生�
 
     from app.jiucaigongshe import routes as jiucaigongshe_routes
     app.include_router(jiucaigongshe_routes.router, prefix='/api/jiucaigongshe', tags=['jiucaigongshe'])
+
+    from app.liepin import routes as liepin_routes
+    app.include_router(liepin_routes.router, prefix='/api/liepin', tags=['liepin'])

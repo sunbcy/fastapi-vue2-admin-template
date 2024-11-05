@@ -110,7 +110,7 @@ export default {
     }
 
     .card {
-        width: 95%;
+        //width: 98%;
         padding: 5px;
         margin: 3px;
         border: 1px solid #ccc;

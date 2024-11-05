@@ -76,6 +76,22 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/findjob',
+    component: Layout,
+    redirect: '/findjob/liepin',
+    name: 'FindJobs',
+    meta: { title: '找工作', icon: 'briefcase-solid' },
+    children: [
+      {
+        path: 'liepin',
+        name: 'Liepin',
+        component: () => import('@/views/liepin/index'),
+        meta: { title: '猎聘网', icon: 'liepin' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
