@@ -59,31 +59,37 @@ class JYGS:
             json=json_data,
             proxies=check_proxy()
         )
-        if not len(response.json().get('data')[1:]):
-            print(response.json())
-            print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
+        if response.json().get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始反爬
+            if not len(response.json().get('data')[1:]):
+                print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
+                return {'data': []}
+            else:  # {"msg":"登录失效","data":{},"errCode":"1","serverTime":1730814117}
+                return response.json()
         else:
-            print(response.json())
-        return response.json()
+            print(response.json().get('msg'))
+            return response.json().get('msg')
 
     def get_jiuyangonshe_data_today(self, time_str):  # 从2024.04.16开始似乎改成API返回数据形式了,后面估计要做反爬.
         print(f'正在获取 <{time_str}> 的数据')
         response = requests.get(f'https://www.jiuyangongshe.com/action/{time_str}', headers=self.headers, proxies=check_proxy())
         response.encoding = response.apparent_encoding
-        script = re.findall(
+        try:
+            script = re.findall(
             "<script>window.__NUXT__=([^<]+);</script>", response.text)[0].replace('\\u002F', "/")
-        data = execjs.eval(script)  # python调用execjs执行方法
-        # print(data)
-        if not data.get('data')[0].get('allCount'):
-            print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
-        return data
+            data = execjs.eval(script)  # python调用execjs执行方法
+            # print(data)
+            if not data.get('data')[0].get('allCount'):
+                print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
+            return data
+        except IndexError:
+            return
 
     def get_data_new(self, time_str):
         data = self.get_jiuyangongshe_data_by_api(time_str)
         i = 1
         today_str = datetime.date.today()
         past_data = False
-        while not len(data.get('data')[1:]):
+        while not (data != '登录失效' and len(data.get('data')[1:])):
             past_n_days_str = str(today_str - datetime.timedelta(days=i))
             data = self.get_jiuyangonshe_data_today(past_n_days_str)
             i += 1
