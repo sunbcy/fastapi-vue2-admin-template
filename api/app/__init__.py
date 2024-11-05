@@ -22,3 +22,6 @@ def register_routers(app):  # 只有在此处注册的应用才可以自动生�
 
     from app.system_info import routes as system_info_routes
     app.include_router(system_info_routes.router, prefix='/api/system_info', tags=['system_info'])
+
+    from app.jiucaigongshe import routes as jiucaigongshe_routes
+    app.include_router(jiucaigongshe_routes.router, prefix='/api/jiucaigongshe', tags=['jiucaigongshe'])

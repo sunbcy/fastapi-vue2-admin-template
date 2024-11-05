@@ -55,149 +55,26 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+
   {
-    path: '/books',
+    path: '/big_a_stock',
     component: Layout,
-    redirect: '/book/author',
-    name: 'Book',
-    meta: { title: '图书管理', icon: 'el-icon-s-help' },
+    redirect: '/big_a_stock',
+    name: 'BigAStock',
+    meta: { title: 'A股市场分析', icon: 'IconParkOutlineStockMarket' },
     children: [
-      // {
-      //   path: 'author',
-      //   name: 'author',
-      //   component: () => import('@/views/author/index'),
-      //   meta: { title: '作者信息', icon: 'table' }
-      // }
-      // {
-      //   path: 'book',
-      //   name: 'book',
-      //   component: () => import('@/views/book/index'),
-      //   meta: { title: '书籍信息', icon: 'table' }
-      // }
+      {
+        path: 'https://dapanyuntu.com/',
+        meta: { title: '大盘云图', icon: 'EmojioneV1StockChart' }
+      },
+      {
+        path: 'jiucaigongshe',
+        name: 'Jiucaigongshe',
+        component: () => import('@/views/jiucaigongshe/index'),
+        meta: { title: '韭研公社', icon: 'jiucaigongshe' }
+      }
     ]
   },
-  // {
-  //   path: '/bcytest', // 父路由。一般定义为 /<模块名>；
-  //   component: Layout, // 具备一个 Layout 布局框架，其中通过子路由填充 route-view
-  //   redirect: '/bcytest/index', // 重定向。一般配置重定向到 /<模块名>/index；
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/bcytest/index'), // 配置自己的组件路径 () => import('@/views/<模块名>/index')
-  //       name: 'User', // 模块名。首字母一般大写
-  //       meta: {
-  //         title: 'User', // 标题。显示在浏览器标签上
-  //         icon: 'user', // 图标名。会从 src/icons/svg/ 目录下找 <图标名>.svg 的图标
-  //         noCache: true // 不缓存
-  //       }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'el-icon-s-help' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'Tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       name: 'Menu2',
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

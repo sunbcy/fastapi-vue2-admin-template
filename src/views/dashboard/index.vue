@@ -1,31 +1,31 @@
 <template>
-    <div class="dashboard-container">
-        <span> {{ todayQuote }} </span>
+  <div class="dashboard-container">
+    <span> {{ todayQuote }} </span>
 
-        <!--    <div class="button-container">-->
-        <!--      <el-button type="primary" @click="updateProject">项目更新</el-button>-->
-        <!--      <el-button type="primary" @click="compileProject">项目编译</el-button>-->
-        <!--      <el-button type="primary" @click="restartProject">项目重启</el-button>-->
-        <!--      <el-button type="danger" @click="oneClickRestart">一键重启</el-button>-->
-        <!--    </div>-->
-        <el-card>
-            <h3>System Information</h3>
-            <p><strong>Current Time:</strong> {{ currentTime }}</p>
-            <p><strong>System Type:</strong> {{ osType }}-{{ systemType }}</p>
-            <p><strong>User Agent:</strong> {{ userAgent }}</p>
-            <p><strong>CPU Info:</strong> {{ cpuInfo }}</p>
-            <strong>Disk Info:</strong>
-                <p v-html="formattedInfo"> {{ diskInfo }}</p>
-            <p><strong>Local IP:</strong> {{ localIP }}</p>
-            <p><strong>Wan IP:</strong> {{ wanIP }}</p>
-            <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>
-            <p><strong>IpInfo:</strong> {{ IpInfo }}</p>
-            <p><strong>Location:</strong> {{ Location }}</p>
-        </el-card>
+    <!--    <div class="button-container">-->
+    <!--      <el-button type="primary" @click="updateProject">项目更新</el-button>-->
+    <!--      <el-button type="primary" @click="compileProject">项目编译</el-button>-->
+    <!--      <el-button type="primary" @click="restartProject">项目重启</el-button>-->
+    <!--      <el-button type="danger" @click="oneClickRestart">一键重启</el-button>-->
+    <!--    </div>-->
+    <el-card>
+      <h3>System Information</h3>
+      <p><strong>Current Time:</strong> {{ currentTime }}</p>
+      <p><strong>System Type:</strong> {{ osType }}-{{ systemType }}</p>
+      <p><strong>User Agent:</strong> {{ userAgent }}</p>
+      <p><strong>CPU Info:</strong> {{ cpuInfo }}</p>
+      <strong>Disk Info:</strong>
+      <p v-html="formattedInfo"> {{ diskInfo }}</p>
+      <p><strong>Local IP:</strong> {{ localIP }}</p>
+      <p><strong>Wan IP:</strong> {{ wanIP }}</p>
+      <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>
+      <p><strong>IpInfo:</strong> {{ IpInfo }}</p>
+      <p><strong>Location:</strong> {{ Location }}</p>
+    </el-card>
 
-        <component :is="currentRole" />
+    <component :is="currentRole" />
 
-    </div>
+  </div>
 </template>
 
 <script>
