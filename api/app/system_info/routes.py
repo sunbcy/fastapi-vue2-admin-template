@@ -19,11 +19,11 @@ import psutil
 import requests
 # from app.system_info import system_bp
 from fastapi import APIRouter
-from app.utils import check_proxy
-from app.utils import get_local_ip
-from app.utils import get_os_type
-from app.utils import responses as resp
-from app.utils.responses import response_with
+from utils import check_proxy
+from utils import get_local_ip
+from utils import get_os_type
+from utils import responses as resp
+from utils.responses import response_with
 # from app.qiyewechat.routes import QiYeWeChatBot
 from bs4 import BeautifulSoup
 from fake_headers import Headers

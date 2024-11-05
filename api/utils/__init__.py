@@ -1,11 +1,17 @@
-import urllib.request
-import socket
-import sys
-import os
+# ---
+# -*- coding: utf-8 -*-
+# @Software: PyCharm
+# @File: __init__.py
+# @Author: sunbcy
+# @Institution: SYLG University, ShenZhen, China
+# @E-mail: saintbcy@163.com
+# @Time: 11月 05, 2024 17:53
+# ---
 import platform
+import socket
 import subprocess
-import re
-
+import sys
+import urllib.request
 
 system = platform.system()
 

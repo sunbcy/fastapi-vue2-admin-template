@@ -4,9 +4,9 @@ import asyncio
 import uvloop
 
 import aiohttp
-from app.utils import check_proxy
-from app.utils import responses as resp
-from app.utils.responses import response_with
+from utils import check_proxy
+from utils import responses as resp
+from utils.responses import response_with
 from fastapi import APIRouter
 from lxml import etree
 
