@@ -23,6 +23,12 @@ class JYGS:
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36'
             }
+        self.cookies = {
+            'SESSION': 'Y2Y1MTdjN2YtNmY3Ni00MzJlLWJhN2ItMTIwOWQ1OTljMTgx',
+            'Hm_lvt_58aa18061df7855800f2a1b32d6da7f4': '1730815202',
+            'UM_distinctid': '192fca0141e34d-06f47c9e9ba581-1f525636-4da900-192fca0141fe8d',
+            'Hm_lpvt_58aa18061df7855800f2a1b32d6da7f4': '1730815435',
+        }
 
     def get_mainpage(self, index_url):
         session = requests.Session()
@@ -51,21 +57,23 @@ class JYGS:
         }
         current_time = str(int(time.time()*1000))
         self.headers['platform'] = '3'
+        self.headers['content-type'] = 'application/json;charset=UTF-8'
         self.headers['timestamp'] = current_time
         self.headers['token'] = execjs.compile(open('api_js/jiuyangongshe_api.js', 'r', encoding='utf-8').read()).call('get_token_by_time', current_time)
         response = requests.post(
             'https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
+            cookies=self.cookies,
             headers=self.headers,
             json=json_data,
             proxies=check_proxy()
         )
-        if response.json().get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始反爬
+        if response.json().get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始加了用户cookie检测
             if not len(response.json().get('data')[1:]):
                 print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
                 return {'data': []}
             else:  # {"msg":"登录失效","data":{},"errCode":"1","serverTime":1730814117}
                 return response.json()
-        else:
+        else:  # {"msg":"","data":{"all":234,"date":"2024-11-05","recommend":18},"errCode":"0","serverTime":1730815441}
             print(response.json().get('msg'))
             return response.json().get('msg')
 
