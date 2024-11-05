@@ -17,16 +17,15 @@ import time
 import nmap
 import psutil
 import requests
-# from app.system_info import system_bp
+# from app.qiyewechat.routes import QiYeWeChatBot
+from bs4 import BeautifulSoup
+from fake_headers import Headers
 from fastapi import APIRouter
 from utils import check_proxy
 from utils import get_local_ip
 from utils import get_os_type
 from utils import responses as resp
 from utils.responses import response_with
-# from app.qiyewechat.routes import QiYeWeChatBot
-from bs4 import BeautifulSoup
-from fake_headers import Headers
 
 # from geopy.geocoders import Nominatim
 REPO_PATH = os.path.abspath('..')

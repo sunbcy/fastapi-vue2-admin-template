@@ -92,6 +92,26 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/entertainment',
+    component: Layout,
+    redirect: '/entertainment/netease_music',
+    name: 'Entertainment',
+    meta: { title: '娱乐', icon: 'StreamlineEntertainmentMusicNote1MusicAudioNote' },
+    children: [
+      {
+        path: 'netease_music',
+        name: 'Netease_music',
+        component: () => import('@/views/netease_music/index'),
+        meta: { title: '网易云音乐', icon: 'netease_music_macos_bigsur_icon_189918' }
+      },
+      {
+        path: 'https://tool.liumingye.cn/music/#/',
+        meta: { title: '刘明野的工具箱', icon: 'tool.liumingye.cn' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

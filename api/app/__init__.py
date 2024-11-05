@@ -28,3 +28,6 @@ def register_routers(app):  # 只有在此处注册的应用才可以自动生�
 
     from app.liepin import routes as liepin_routes
     app.include_router(liepin_routes.router, prefix='/api/liepin', tags=['liepin'])
+
+    from app.netease_music import routes as netease_music_routes
+    app.include_router(netease_music_routes.router, prefix='/api/netease_music', tags=['netease_music'])
