@@ -34,3 +34,6 @@ def register_routers(app):  # 只有在此处注册的应用才可以自动生�
 
     from app.pcap_analysis import routes as pcap_analysis_routes
     app.include_router(pcap_analysis_routes.router, prefix='/api/pcap_analysis', tags=['pcap_analysis'])
+
+    from app.databases import routes as databases_routes
+    app.include_router(databases_routes.router, prefix='/api/databases', tags=['databases'])

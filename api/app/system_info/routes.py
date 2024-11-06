@@ -148,7 +148,7 @@ def get_network_range(ip, prefix_length=24):
 
 
 def get_local_network_ip_mac(server_ip):
-    script_path = os.path.abspath('app/utils/scan_network.py')
+    script_path = os.path.abspath('utils/scan_network.py')
     # 需要root权限的命令
     command = ['sudo', 'nohup', 'python3', script_path, server_ip]
     password = '0828'  # 替换为你的实际密码

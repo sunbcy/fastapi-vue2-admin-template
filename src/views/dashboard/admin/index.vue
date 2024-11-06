@@ -1,44 +1,44 @@
 <template>
   <div class="dashboard-editor-container">
-<!--    <github-corner class="github-corner" />-->
+    <!--    <github-corner class="github-corner" />-->
 
-<!--    <panel-group @handleSetLineChartData="handleSetLineChartData" />-->
+    <!--    <panel-group @handleSetLineChartData="handleSetLineChartData" />-->
 
-<!--    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
-<!--      <line-chart :chart-data="lineChartData" />-->
-<!--    </el-row>-->
+    <!--    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
+    <!--      <line-chart :chart-data="lineChartData" />-->
+    <!--    </el-row>-->
 
     <el-row :gutter="24">
-<!--      <el-col :xs="24" :sm="24" :lg="8">-->
-<!--        <div class="chart-wrapper">-->
-<!--          <raddar-chart />-->
-<!--        </div>-->
-<!--      </el-col>-->
-<!--      <div class="flex-parent">-->
-        <el-col :xs="24" :sm="24" :lg="8">
-          <div class="chart-wrapper">
-            <pie-chart />
-          </div>
-        </el-col>
+      <!--      <el-col :xs="24" :sm="24" :lg="8">-->
+      <!--        <div class="chart-wrapper">-->
+      <!--          <raddar-chart />-->
+      <!--        </div>-->
+      <!--      </el-col>-->
+      <!--      <div class="flex-parent">-->
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <pie-chart />
+        </div>
+      </el-col>
 
-<!--        <el-col :xs="24" :sm="24" :lg="8">-->
-<!--          <div class="chart-wrapper">-->
-<!--            <device-table></device-table>-->
-<!--          </div>-->
-<!--        </el-col>-->
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <device-table />
+        </div>
+      </el-col>
 
-<!--        <el-col :xs="24" :sm="24" :lg="8">-->
-<!--          <div class="chart-wrapper">-->
-<!--            <databases-table></databases-table>-->
-<!--          </div>-->
-<!--        </el-col>-->
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <databases-table />
+        </div>
+      </el-col>
 
-<!--      </div>-->
-<!--      <el-col :xs="24" :sm="24" :lg="8">-->
-<!--        <div class="chart-wrapper">-->
-<!--          <bar-chart />-->
-<!--        </div>-->
-<!--      </el-col>-->
+      <!--      </div>-->
+      <!--      <el-col :xs="24" :sm="24" :lg="8">-->
+      <!--        <div class="chart-wrapper">-->
+      <!--          <bar-chart />-->
+      <!--        </div>-->
+      <!--      </el-col>-->
     </el-row>
 
   </div>
@@ -50,8 +50,8 @@
 // import LineChart from './components/LineChart'
 // import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
-// import DeviceTable from '@/components/DeviceTable'
-// import DatabasesTable from '@/components/DatabasesTable'
+import DeviceTable from '@/components/DeviceTable'
+import DatabasesTable from '@/components/DatabasesTable'
 // import BarChart from './components/BarChart'
 // import TransactionTable from './components/TransactionTable'
 // import TodoList from './components/TodoList'
@@ -83,9 +83,9 @@ export default {
     // PanelGroup,
     // LineChart,
     // RaddarChart,
-    PieChart
-    // DeviceTable,
-    // DatabasesTable
+    PieChart,
+    DeviceTable,
+    DatabasesTable
     // BarChart,
     // TransactionTable,
     // TodoList,
