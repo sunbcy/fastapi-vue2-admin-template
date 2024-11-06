@@ -128,6 +128,22 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/send_info',
+    component: Layout,
+    redirect: '/send_info/qiyewechat',
+    name: 'Sendinfo',
+    meta: { title: '发通知', icon: 'message-solid' },
+    children: [
+      {
+        path: 'qiyewechat',
+        name: 'QiYeWechat',
+        component: () => import('@/views/qiyewechat/index'),
+        meta: { title: '企业微信', icon: 'qiyewechat' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

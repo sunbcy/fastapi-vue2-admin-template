@@ -19,7 +19,8 @@
       <p><strong>Local IP:</strong> {{ localIP }}</p>
       <p><strong>Wan IP:</strong> {{ wanIP }}</p>
       <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>
-      <p><strong>IpInfo:</strong> {{ IpInfo }}</p>
+      <strong>IpInfo:</strong>
+        <p v-html="formattedIpInfo">{{ IpInfo }}</p>
       <p><strong>Location:</strong> {{ Location }}</p>
     </el-card>
 
@@ -60,6 +61,9 @@ export default {
   computed: {
     formattedInfo() {
       return this.diskInfo.replace(/\n/g, '<br>')
+    },
+    formattedIpInfo() {
+      return this.IpInfo.replace(/\n/g, '<br>')
     }
   },
   mounted() {
