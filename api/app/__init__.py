@@ -31,3 +31,6 @@ def register_routers(app):  # 只有在此处注册的应用才可以自动生�
 
     from app.netease_music import routes as netease_music_routes
     app.include_router(netease_music_routes.router, prefix='/api/netease_music', tags=['netease_music'])
+
+    from app.pcap_analysis import routes as pcap_analysis_routes
+    app.include_router(pcap_analysis_routes.router, prefix='/api/pcap_analysis', tags=['pcap_analysis'])

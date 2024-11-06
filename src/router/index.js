@@ -112,6 +112,22 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/analysis_tools',
+    component: Layout,
+    redirect: '/analysis_tools/pcap_analysis',
+    name: 'AnalysisTools',
+    meta: { title: '流量分析工具', icon: 'analysis' },
+    children: [
+      {
+        path: 'pcap_analysis',
+        name: 'PcapAnalysis',
+        component: () => import('@/views/pcap_analysis/index'),
+        meta: { title: '数据包分析', icon: 'network' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
