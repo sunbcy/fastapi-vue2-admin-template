@@ -20,7 +20,7 @@
       <p><strong>Wan IP:</strong> {{ wanIP }}</p>
       <p><strong>Latitude, Longitude:</strong> [{{ Latitude }}, {{ Longitude }}]</p>
       <strong>IpInfo:</strong>
-        <p v-html="formattedIpInfo">{{ IpInfo }}</p>
+      <p v-html="formattedIpInfo">{{ IpInfo }}</p>
       <p><strong>Location:</strong> {{ Location }}</p>
     </el-card>
 
@@ -91,7 +91,7 @@ export default {
     //     this.$message.success('编译项目✅');
     //   }).catch(err => {
     //     console.log(err)
-    //     this.$message.error('服务端异常, 获取失败.');
+    //     this.$message. error('服务端异常, 获取失败.');
     //   });
     // },
     // restartProject() {
@@ -115,32 +115,30 @@ export default {
         this.currentTime = new Date().toLocaleString()
       }, 1000)
     },
-    getSystemInfo() {
+    async getSystemInfo() {
       // 使用Node.js环境中的 `os` 模块来获取系统信息
       const os = require('os')
-
       this.systemType = os.type()
       this.userAgent = navigator.userAgent
-      get_system_info()
-        .then(res => {
-          this.osType = res.searchResults.os_type
-          this.cpuInfo = res.searchResults.cpu_info
-          this.diskInfo = res.searchResults.disk_info
-          this.localIP = res.searchResults.local_ip
-          this.wanIP = res.searchResults.wan_ip
-          this.Latitude = res.searchResults.latitude
-          this.Longitude = res.searchResults.longitude
-          this.IpInfo = res.searchResults.ip_info
-          this.Location = res.searchResults.location
-          // console.log(res.searchResults);  // debug
-          if (this.wanIP === 'ip not found!') {
-            this.$message.error('服务器可能处于离线模式！请检查网络。。。')
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 获取失败.')
-        })
+      try {
+        const res = await get_system_info()
+        this.osType = res.searchResults.os_type
+        this.cpuInfo = res.searchResults.cpu_info
+        this.diskInfo = res.searchResults.disk_info
+        this.localIP = res.searchResults.local_ip
+        this.wanIP = res.searchResults.wan_ip
+        this.Latitude = res.searchResults.latitude
+        this.Longitude = res.searchResults.longitude
+        this.IpInfo = res.searchResults.ip_info
+        this.Location = res.searchResults.location
+        // console.log(res.searchResults);  // debug
+        if (this.wanIP === 'ip not found!') {
+          this.$message.error('服务器可能处于离线模式！请检查网络。。。')
+        }
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 获取失败.')
+      }
     },
     async getQuote() {
       try {

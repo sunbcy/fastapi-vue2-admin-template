@@ -49,7 +49,7 @@ export default {
       const s_data = {
         'text': this.textMessage
       }
-      console.log((s_data))
+      console.log(s_data)
       sendText(s_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
         .then(res => {
           this.sendResults = res.sendResults // -->
