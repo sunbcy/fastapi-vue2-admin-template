@@ -117,7 +117,7 @@ def get_position(ips):
 
 def get_ip_info(ip=None):
     precnt_mode = "<pre>(.*?)</pre>"
-    url = 'http://cip.cc'  # 免费的IP查询地址
+    url = 'http://cip.cc'  # 免费的IP查询地址  会失效,502
     url = f"{url}/{ip}" if ip else f'{url}'
     headers = Headers(headers=True).generate()
     html = requests.get(url, headers=headers, proxies=check_proxy())
@@ -324,9 +324,17 @@ def get_system_info():  # 获取系统的数据
     wan_ip = get_wan_ip()
     if wan_ip:
         latitude, longitude = get_position(wan_ip)
-        ip_info = get_ip_info(wan_ip)
+        try:
+            ip_info = get_ip_info(wan_ip)
+        except Exception as e:
+            ip_info = ''
+            print(f'get_ip_info()不可用🚫,请排查!!!')
     else:
-        ip_info = get_ip_info()
+        try:
+            ip_info = get_ip_info()
+        except Exception as e:
+            ip_info = ''
+            print(f'get_ip_info()不可用🚫,请排查!!!')
         wan_ip = [i for i in ip_info.split('\n') if 'IP' in i][0].split(':')[1].strip()
         latitude, longitude = get_position(wan_ip)
     # location = get_location(latitude, longitude)
