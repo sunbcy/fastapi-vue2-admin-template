@@ -298,139 +298,114 @@ export default {
     setTimeout(this.onSearchSong(), 500)
   },
   methods: {
-    onSearch() {
+    async onSearch() {
       // 触发搜索逻辑
       const s_data = {
         'searchText': this.searchText
       }
-      // 例如，发送请求到服务器并更新tableData
-      searchKeywords(s_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.tableData = res.searchResults // -->
-          console.log(this.tableData)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await searchKeywords(s_data)
+        this.tableData = res.searchResults // -->
+        console.log(this.tableData)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_songlist_id'
     },
-    onSearchSong() {
+    async onSearchSong() {
       // 触发搜索逻辑
       const ss_data = {
         'song_searchDetail': this.song_searchDetail,
         'songid_searchSongUrl': this.song_searchDetail,
         'songid_searchSongLyric': this.song_searchDetail
       }
+      try {
+        const res = await sid_searchUrl(ss_data)
+        this.songid_searchSongUrlResult = res.searchResults // -->
+        console.log(this.songid_searchSongUrlResult)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
 
-      sid_searchUrl(ss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songid_searchSongUrlResult = res.searchResults // -->
-          console.log(this.songid_searchSongUrlResult)
-          // console.log(this.song_detailResult.name);
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
+      try {
+        const res = await songsearchKeywords(ss_data)
+        this.song_detailResult = res.searchResults
+        console.log(this.song_detailResult.name)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
 
-      // 例如，发送请求到服务器并更新tableData
-      songsearchKeywords(ss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.song_detailResult = res.searchResults // -->
-          // console.log(this.song_detailResult);
-          console.log(this.song_detailResult.name)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
-      sid_searchLyric(ss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songid_searchSongLyricResult = res.searchResults // -->
-          console.log(this.songid_searchSongLyricResult)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await sid_searchLyric(ss_data)
+        this.songid_searchSongLyricResult = res.searchResults // -->
+        console.log(this.songid_searchSongLyricResult)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_song_id'
     },
-    onSearchSongs() {
+    async onSearchSongs() {
       // 触发搜索逻辑
       const sss_data = {
         'playlistid_searchSongs': this.playlistid_searchSongs
       }
-      // 例如，发送请求到服务器并更新tableData
-      pid_searchKeyword(sss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songs_tableData = res.searchResults // -->
-          console.log(this.songs_tableData)
-          // console.log(this.song_detailResult.name);
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await pid_searchKeyword(sss_data)
+        this.songs_tableData = res.searchResults // -->
+        console.log(this.songs_tableData)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_songs_playlistid'
     },
-    onSearchSongUrl() {
+    async onSearchSongUrl() {
       // 触发搜索逻辑
       const ssss_data = {
         'songid_searchSongUrl': this.songid_searchSongUrl
       }
-      // 例如，发送请求到服务器并更新tableData
-      sid_searchUrl(ssss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songid_searchSongUrlResult = res.searchResults // -->
-          console.log(this.songid_searchSongUrlResult)
-          // console.log(this.song_detailResult.name);
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await sid_searchUrl(ssss_data)
+        this.songid_searchSongUrlResult = res.searchResults // -->
+        console.log(this.songid_searchSongUrlResult)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_songs_musicurl'
     },
-    onSearchSongLyric() {
+    async onSearchSongLyric() {
       // 触发搜索逻辑
       const sssss_data = {
         'songid_searchSongLyric': this.songid_searchSongLyric
       }
-      // 例如，发送请求到服务器并更新tableData
-      sid_searchLyric(sssss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songid_searchSongLyricResult = res.searchResults // -->
-          console.log(this.songid_searchSongLyricResult)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await sid_searchLyric(sssss_data)
+        this.songid_searchSongLyricResult = res.searchResults // -->
+        console.log(this.songid_searchSongLyricResult)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_songs_musiclyric'
     },
-    onSearchSongComments() {
+    async onSearchSongComments() {
       // 触发搜索逻辑
       const ssssss_data = {
         'songid_searchSongComments': this.songid_searchSongComments
       }
-      // 例如，发送请求到服务器并更新tableData
-      sid_searchComments(ssssss_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.songid_searchSongCommentsResult = res.searchResults // -->
-          console.log(this.songid_searchSongCommentsResult)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
-
+      try {
+        const res = await sid_searchComments(ssssss_data)
+        this.songid_searchSongCommentsResult = res.searchResults // -->
+        console.log(this.songid_searchSongCommentsResult)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
       this.currentView = 'search_songs_musiccomments'
     },
     getIP() {
@@ -483,7 +458,7 @@ export default {
   display: flex;
   justify-content: left;  /* 水平居中 */
   align-items: center;      /* 垂直居中 */
-  margin-top: 0px;         /* 可选：添加一些顶部间距 */
+  margin-top: 0;         /* 可选：添加一些顶部间距 */
 }
 
 .album-cover-1 {
@@ -491,7 +466,7 @@ export default {
   height: auto;  /* 保持图片的宽高比 */
   border-radius: 90%;  /* 使图片呈现圆形 */
   object-fit: cover;  /* 保持图片的比例并裁剪以适应容器 */
-  margin-top: 0px;  /* 可选：添加一些顶部间距 */
+  margin-top: 0;  /* 可选：添加一些顶部间距 */
 }
 
 .song-link {

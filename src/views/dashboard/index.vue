@@ -149,14 +149,6 @@ export default {
         console.log(err)
         this.$message.error('服务端异常, 获取失败.')
       }
-      // getTodayQuote()
-      //   .then(res => {
-      //     this.todayQuote = res.searchResults.text
-      //   })
-      //   .catch(err => {
-      //     console.log(err)
-      //     this.$message.error('服务端异常, 获取失败.')
-      //   })
     }
 
   }
