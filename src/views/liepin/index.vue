@@ -83,9 +83,9 @@
     <!-- 对话框组件 -->
     <el-dialog :visible.sync="dialogVisible" title="职位详情" width="87%">
       <p v-if="details && details.job_tags">{{ details.job_tags }}</p>
-      <p v-if="details && details.job_intro_content">{{ details.job_intro_content }}</p>
-      <p v-if="details && details.company_intro">{{ details.company_intro }}</p>
-      <p v-if="details && details.company_info">{{ details.company_info }}</p>
+      <p v-if="details && details.job_intro_content" v-html="formattedJobDetailIntro" />
+      <p v-if="details && details.company_intro" v-html="formattedCompanyIntro" />
+      <p v-if="details && details.company_info" v-html="formattedCompanyInfo" />
       <p v-else>加载中...</p>
     </el-dialog>
 
@@ -137,6 +137,26 @@ export default {
         key: 'value'
       },
       showBackToTopButton: false
+    }
+  },
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    formattedJobDetailIntro() {
+      if (this.details && this.details.job_intro_content) {
+        return this.details.job_intro_content.replace(/\n/g, '<br>')
+      }
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    formattedCompanyIntro() {
+      if (this.details && this.details.company_intro) {
+        return this.details.company_intro.replace(/\n/g, '<br>')
+      }
+    },
+    // eslint-disable-next-line vue/return-in-computed-property
+    formattedCompanyInfo() {
+      if (this.details && this.details.company_info) {
+        return this.details.company_info.replace(/\n/g, '<br>')
+      }
     }
   },
   mounted() {
