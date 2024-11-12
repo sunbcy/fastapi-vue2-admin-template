@@ -50,19 +50,15 @@ export default {
     this.get_info()
   },
   methods: {
-    get_info() {
-      get_block_info()
-        .then(res => {
-          this.searchResults = res.searchResults
-          console.log(this.searchResults)
-          setTimeout(() => {
-            this.searchResults = res.searchResults
-          }, 500)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 获取失败.')
-        })
+    async get_info() {
+      try {
+        const res = await get_block_info()
+        this.searchResults = res.searchResults
+        console.log(this.searchResults)
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 获取失败.')
+      }
     },
     formatExpound(sub_result) {
       // 确保sub_result.article.action_info.expound存在

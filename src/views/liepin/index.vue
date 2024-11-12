@@ -168,7 +168,7 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    fetchDetails(jobUrl) {
+    async fetchDetails(jobUrl) {
       const req_Data = {
         'city': this.selectedRegion,
         'dq': this.selectedRegion,
@@ -181,31 +181,34 @@ export default {
         'payload': req_Data
       }
       this.dialogVisible = true
-      getJobDetails(reqData).then(res => {
+      try {
+        const res = await getJobDetails(reqData)
         this.details = res.searchResults
         console.log('Details:', this.details) // 调试信息
-      }).catch(err => {
+      } catch (err) {
         console.log(err)
         this.$message.error('服务端异常, 职位detail搜索失败')
-      })
+      }
     },
-    getJobNum() {
-      get_job_num().then(res => {
+    async getJobNum() {
+      try {
+        const res = await get_job_num()
         this.jobNum = res.searchResults
-      }).catch(err => {
+      } catch (err) {
         console.log(err)
         this.$message.error('服务端异常, 职位数目搜索失败')
-      })
+      }
     },
-    getCompNum() {
-      get_comp_num().then(res => {
+    async getCompNum() {
+      try {
+        const res = await get_comp_num()
         this.compNum = res.searchResults
-      }).catch(err => {
+      } catch (err) {
         console.log(err)
         this.$message.error('服务端异常, 公司数目搜索失败')
-      })
+      }
     },
-    search() {
+    async search() {
       // 这里可以编写发送请求获取搜索结果的逻辑, 例如使用Axios或者Fetch API
       console.log('search ' + this.searchJobKeyword)
       const req_Data = {
@@ -217,22 +220,14 @@ export default {
       }
       // const req_Data_json = JSON.stringify(req_Data)
       console.log(req_Data)
-      search_jobs(req_Data)
-        .then(res => {
-          this.searchResults = res.searchResults
-          this.dataToExport.key = res.searchResults
-          // console.log(this.searchResults);
-          setTimeout(() => {
-            this.searchResults = res.searchResults
-            this.dataToExport.key = res.searchResults
-          }, 500)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 职位搜索失败.')
-        })
-
-      // 示例中用settimeout模拟异步请求
+      try {
+        const res = await search_jobs(req_Data)
+        this.searchResults = res.searchResults
+        this.dataToExport.key = res.searchResults
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 职位搜索失败.')
+      }
     },
     exportData() {
       const jsonData = JSON.stringify(this.dataToExport, null, 2)
