@@ -106,15 +106,15 @@ export default {
       this.uploadPercentage = 0 // 在上传失败后重置进度
       this.isUploading = false // 标记上传结束
     },
-    getAnalysisData() {
+    async getAnalysisData() {
       const send_data = { 'data': this.fileList }
-      get_analysis_info(send_data).then(res => {
-        this.tableData = res.data // {'id':index, 'packetName': pcap_name, 'resultLink': '/result/' + str(index), 'ret_info': ret_info}
-      })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 分析失败.')
-        })
+      try {
+        const res = await get_analysis_info(send_data)
+        this.tableData = res.data
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 分析失败.')
+      }
     },
     startAnalysis() {
       if (this.fileList.length > 0) {

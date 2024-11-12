@@ -44,26 +44,21 @@ export default {
     }
   },
   methods: {
-    sendMessage() {
+    async sendMessage() {
       // 在这里实现你的发送消息的逻辑
       const s_data = {
         'text': this.textMessage
       }
       console.log(s_data)
-      sendText(s_data) // encodeURIComponent .then(response => {}).catch(error => { this.$message.error('服务端异常, 搜索失败.'); })
-        .then(res => {
-          this.sendResults = res.sendResults // -->
-          console.log(this.sendResults)
-          this.$message.success('消息发送成功!')
-          // console.log(res.code.list);
-          // setTimeout(() => {
-          //   this.sendResults = res.sendResults
-          // }, 500)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$message.error('服务端异常, 发送失败.')
-        })
+      try {
+        const res = await sendText(s_data)
+        this.sendResults = res.sendResults // -->
+        console.log(this.sendResults)
+        this.$message.success('消息发送成功!')
+      } catch (err) {
+        console.log(err)
+        this.$message.error('服务端异常, 发送失败.')
+      }
     }
   }
 }
