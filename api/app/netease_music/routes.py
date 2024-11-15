@@ -1,11 +1,12 @@
+import json
+
+import execjs
+import requests
 from fastapi import APIRouter
 from pydantic import BaseModel
-from utils.responses import response_with
-from utils import responses as resp
 from utils import check_proxy
-import requests
-import json
-import execjs
+from utils import responses as resp
+from utils.responses import response_with
 
 router = APIRouter()
 headers = {

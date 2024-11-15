@@ -1,15 +1,14 @@
 # # from app.qiyewechat.routes import QiYeWeChatBot
 from traceback import print_exc
-import asyncio
-import uvloop
 
 import aiohttp
+import asyncio
+import uvloop
+from fastapi import APIRouter
+from lxml import etree
 from utils import check_proxy
 from utils import responses as resp
 from utils.responses import response_with
-from fastapi import APIRouter
-from lxml import etree
-
 
 # 使用 uvloop 作为事件循环
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -75,7 +74,7 @@ class AsyncQuotesBot:
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super().__new__(cls)
-            cls._instance.session = aiohttp.ClientSession()
+            cls._instance.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=10, ssl=False))
         return cls._instance
 
     def __init__(self, proxy=check_proxy()):
@@ -91,13 +90,13 @@ class AsyncQuotesBot:
         if self.proxy:
             kwargs['proxy'] = self.proxy
 
-        async with aiohttp.ClientSession(connector=self.connector) as session:
-            if self.proxy:
-                async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers,  **kwargs) as response:  # proxy=self.proxy
-                    return await response.text()
-            else:
-                async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers) as response:  # proxy=self.proxy
-                    return await response.text()
+        # async with aiohttp.ClientSession(connector=self.connector) as session:
+        if self.proxy:
+            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers,  **kwargs) as response:  # proxy=self.proxy
+                return await response.text()
+        else:
+            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers) as response:  # proxy=self.proxy
+                return await response.text()
 
     async def get_today_quote(self):
         try:

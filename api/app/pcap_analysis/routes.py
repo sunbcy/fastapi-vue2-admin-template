@@ -3,17 +3,15 @@ from traceback import print_exc
 
 from fastapi import APIRouter
 from fastapi import Request
-from fastapi import UploadFile, File
+from fastapi import UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 # from werkzeug.utils import secure_filename
-# import json
 from scapy.all import rdpcap
 from scapy_ssl_tls.ssl_tls import *
 from utils import responses as resp
 from utils.pcap_tool import get_host_ip_slow, ip_collect, ip_stastics
 from utils.responses import response_with
-from starlette.datastructures import FormData
 
 router = APIRouter()
 # 设置允许的文件格式

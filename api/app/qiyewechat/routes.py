@@ -2,15 +2,14 @@
 
 # -d '{"msgtype":"text","text":{"content":"Hello world"}}'
 import json
+from urllib.parse import unquote
+
 import requests
-from urllib.parse import quote, unquote
-# from app.qiyewechat import qiyewechat_bp
 from fastapi import APIRouter
-from utils.responses import response_with
-from utils import responses as resp
-from utils import check_proxy
-# from flask import request
 from fastapi import Request
+from utils import check_proxy
+from utils import responses as resp
+from utils.responses import response_with
 
 router = APIRouter()
 

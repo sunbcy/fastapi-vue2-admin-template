@@ -222,7 +222,7 @@ class liepin_searchjob:
             company_id = company_url.split('/')[-2]
             job_intro_tag = html.xpath('//main//content//section[@class="job-intro-container"]//ul/li/text()')
             job_tags = str(tuple(job_properties + job_intro_tag))
-        except:
+        except Exception:
             job_tags = ''
 
         try:
