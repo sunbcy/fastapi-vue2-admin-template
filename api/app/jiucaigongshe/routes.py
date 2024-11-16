@@ -31,24 +31,6 @@ class JYGS:
             'Hm_lpvt_58aa18061df7855800f2a1b32d6da7f4': '1730815435',
         }
 
-    # def get_mainpage(self, index_url: str):
-    #     res = requests.get(index_url, headers=self.headers, proxies=check_proxy())
-    #     return res.text
-    #
-    # def mainpage_parse(self, w_date: str) -> dict:  #
-    #     print(f'正在获取 {w_date} 的数据')
-    #     index_url = urljoin('https://www.jiuyangongshe.com/action/', w_date)
-    #     res_text = self.get_mainpage(index_url)
-    #     tree = etree.HTML(res_text)
-    #     a = tree.xpath('//li//div[@class="fs18-bold lf"]')  # 定位到板块
-    #     ret_json = dict()
-    #     for _ in a:
-    #         block_name = _.text
-    #         action_num = _.xpath('following-sibling::div[@class="number lf"]/text()')[0]
-    #         {'block_name': block_name, 'action_num': action_num}
-    #         ret_json[block_name] = {'block_name': block_name, 'action_num': action_num}
-    #     return ret_json
-
     async def get_jiuyangongshe_data_by_api(self, time_str: str) -> dict:
         print(f'正在获取 <{time_str}> 的数据')
         json_data = {
@@ -67,13 +49,6 @@ class JYGS:
             json=json_data,
             proxy=check_proxy()['http']) as response:
                 response_json = await response.json()
-        # response = requests.post(
-        #     'https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
-        #     cookies=self.cookies,
-        #     headers=self.headers,
-        #     json=json_data,
-        #     proxies=check_proxy()
-        # )
         if response_json.get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始加了用户cookie检测
             if not len(response_json.get('data')[1:]):
                 print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')

@@ -2,7 +2,8 @@
 # from urllib.parse import urljoin, urlparse
 import json
 
-import requests
+# import requests
+import aiohttp
 # from app import db
 # from app.liepin.models import JobRequest, JobRecommendation
 # from app.liepin.schema import jobRecommendationScheme
@@ -93,11 +94,14 @@ class liepin_searchjob:
         }
         # self.jobrecommend_oper = jobRecommendationScheme()  # 生成职位推荐对象
 
-    def get_liepin_searchjobs(self):
+    async def get_liepin_searchjobs(self):
         print(f"当前访问第 {self.payload['data']['mainSearchPcConditionForm']['currentPage'] + 1} 页")
-        r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())  # ,verify=False
-        print(f'状态码: <{r.status_code}>')
-        result_ret = json.loads(r.text)  # r.text  #
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
+                r_text = await response.text()
+        # r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())  # ,verify=False
+        # print(f'状态码: <{r.status_code}>')
+        result_ret = json.loads(r_text)  # r.text  #
         print(result_ret)
         pagination = result_ret['data']['pagination']
         currentPage = pagination['currentPage']
@@ -106,9 +110,12 @@ class liepin_searchjob:
         while currentPage < totalPage:
             self.payload['data']['mainSearchPcConditionForm']['currentPage'] += 1
             print(f"当前访问第 {self.payload['data']['mainSearchPcConditionForm']['currentPage'] + 1} 页")
-            r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())
-            print(f'状态码: <{r.status_code}>')
-            result_next = json.loads(r.text)
+            async with aiohttp.ClientSession() as session:
+                async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
+                    r_text = await response.text()
+            # r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())
+            # print(f'状态码: <{r.status_code}>')
+            result_next = json.loads(r_text)
             print(result_next)
             result_ret['data']['data']['jobCardList'] += (result_next['data']['data']['jobCardList'] if 'jobCardList' in result_next['data']['data'] else [])
             pagination = result_next['data']['pagination']
@@ -192,7 +199,7 @@ class liepin_searchjob:
         finally:
             return jobs
 
-    def get_job_detail_infos(self, job_link):
+    async def get_job_detail_infos(self, job_link):
         print('【访问】 {job_link}'.format(job_link=job_link))
         self.headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -209,9 +216,12 @@ class liepin_searchjob:
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"macOS"',
         }
-        r = requests.get(job_link, headers=self.headers, proxies=check_proxy())
-        r.encoding = r.apparent_encoding
-        html = etree.HTML(r.text)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(job_link, headers=self.headers, proxy=check_proxy()['http']) as response:
+                r_text = await response.text()
+        # r = requests.get(job_link, headers=self.headers, proxies=check_proxy())
+        # r.encoding = r.apparent_encoding
+        html = etree.HTML(0)
         try:
             web_title = html.xpath('//head/title/text()')[0]
             job_id = job_link.split('/')[-1].split('.')[0]
