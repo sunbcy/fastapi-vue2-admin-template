@@ -4,9 +4,7 @@ import subprocess
 import psutil
 from app.databases.schema import getDatabases
 from app.databases.schema import get_DbTables
-# from app.databases import databases_bp
 from fastapi import APIRouter
-# from flask import request
 from fastapi import Request
 from utils import get_os_type
 from utils import responses as resp

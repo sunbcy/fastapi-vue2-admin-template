@@ -29,18 +29,17 @@ class JYGS:
             'Hm_lpvt_58aa18061df7855800f2a1b32d6da7f4': '1730815435',
         }
 
-    def get_mainpage(self, index_url):
-        session = requests.Session()
-        res = session.get(index_url, headers=self.headers, proxies=check_proxy())
+    def get_mainpage(self, index_url: str):
+        res = requests.get(index_url, headers=self.headers, proxies=check_proxy())
         return res.text
 
-    def mainpage_parse(self, w_date):  #
+    def mainpage_parse(self, w_date: str) -> dict:  #
         print(f'正在获取 {w_date} 的数据')
         index_url = urljoin('https://www.jiuyangongshe.com/action/', w_date)
         res_text = self.get_mainpage(index_url)
         tree = etree.HTML(res_text)
         a = tree.xpath('//li//div[@class="fs18-bold lf"]')  # 定位到板块
-        ret_json = {}
+        ret_json = dict()
         for _ in a:
             block_name = _.text
             action_num = _.xpath('following-sibling::div[@class="number lf"]/text()')[0]
@@ -48,13 +47,13 @@ class JYGS:
             ret_json[block_name] = {'block_name': block_name, 'action_num': action_num}
         return ret_json
 
-    def get_jiuyangongshe_data_by_api(self, time_str):
+    def get_jiuyangongshe_data_by_api(self, time_str: str) -> dict:
         print(f'正在获取 <{time_str}> 的数据')
         json_data = {
             'date': time_str,
             'pc': 1,
         }
-        current_time = str(int(time.time()*1000))
+        current_time = str(int(time.time() * 1000))
         self.headers['platform'] = '3'
         self.headers['content-type'] = 'application/json;charset=UTF-8'
         self.headers['timestamp'] = current_time
@@ -91,14 +90,18 @@ class JYGS:
         except IndexError:
             return
 
-    def get_data_new(self, time_str):
+    def get_data_new(self, time_str: str) -> list:
         data = self.get_jiuyangongshe_data_by_api(time_str)
         i = 1
         today_str = datetime.date.today()
         past_data = False
         while not (data != '登录失效' and len(data.get('data')[1:])):
             past_n_days_str = str(today_str - datetime.timedelta(days=i))
-            data = self.get_jiuyangonshe_data_today(past_n_days_str)
+            try:
+                data = self.get_jiuyangonshe_data_today(past_n_days_str)
+            except Exception as e:
+                actionFieldList = []
+                return actionFieldList
             i += 1
             past_data = True
         if past_data:
