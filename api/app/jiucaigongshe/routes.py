@@ -5,7 +5,9 @@ import time
 from urllib.parse import urljoin
 
 import execjs
-import requests
+# import requests
+import aiohttp
+import asyncio
 from fastapi import APIRouter
 from lxml import etree
 from utils import check_proxy
@@ -29,25 +31,25 @@ class JYGS:
             'Hm_lpvt_58aa18061df7855800f2a1b32d6da7f4': '1730815435',
         }
 
-    def get_mainpage(self, index_url: str):
-        res = requests.get(index_url, headers=self.headers, proxies=check_proxy())
-        return res.text
+    # def get_mainpage(self, index_url: str):
+    #     res = requests.get(index_url, headers=self.headers, proxies=check_proxy())
+    #     return res.text
+    #
+    # def mainpage_parse(self, w_date: str) -> dict:  #
+    #     print(f'正在获取 {w_date} 的数据')
+    #     index_url = urljoin('https://www.jiuyangongshe.com/action/', w_date)
+    #     res_text = self.get_mainpage(index_url)
+    #     tree = etree.HTML(res_text)
+    #     a = tree.xpath('//li//div[@class="fs18-bold lf"]')  # 定位到板块
+    #     ret_json = dict()
+    #     for _ in a:
+    #         block_name = _.text
+    #         action_num = _.xpath('following-sibling::div[@class="number lf"]/text()')[0]
+    #         {'block_name': block_name, 'action_num': action_num}
+    #         ret_json[block_name] = {'block_name': block_name, 'action_num': action_num}
+    #     return ret_json
 
-    def mainpage_parse(self, w_date: str) -> dict:  #
-        print(f'正在获取 {w_date} 的数据')
-        index_url = urljoin('https://www.jiuyangongshe.com/action/', w_date)
-        res_text = self.get_mainpage(index_url)
-        tree = etree.HTML(res_text)
-        a = tree.xpath('//li//div[@class="fs18-bold lf"]')  # 定位到板块
-        ret_json = dict()
-        for _ in a:
-            block_name = _.text
-            action_num = _.xpath('following-sibling::div[@class="number lf"]/text()')[0]
-            {'block_name': block_name, 'action_num': action_num}
-            ret_json[block_name] = {'block_name': block_name, 'action_num': action_num}
-        return ret_json
-
-    def get_jiuyangongshe_data_by_api(self, time_str: str) -> dict:
+    async def get_jiuyangongshe_data_by_api(self, time_str: str) -> dict:
         print(f'正在获取 <{time_str}> 的数据')
         json_data = {
             'date': time_str,
@@ -58,30 +60,40 @@ class JYGS:
         self.headers['content-type'] = 'application/json;charset=UTF-8'
         self.headers['timestamp'] = current_time
         self.headers['token'] = execjs.compile(open('api_js/jiuyangongshe_api.js', 'r', encoding='utf-8').read()).call('get_token_by_time', current_time)
-        response = requests.post(
-            'https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
+        async with aiohttp.ClientSession() as session:
+            async with session.post('https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
             cookies=self.cookies,
             headers=self.headers,
             json=json_data,
-            proxies=check_proxy()
-        )
-        if response.json().get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始加了用户cookie检测
-            if not len(response.json().get('data')[1:]):
+            proxy=check_proxy()['http']) as response:
+                response_json = await response.json()
+        # response = requests.post(
+        #     'https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
+        #     cookies=self.cookies,
+        #     headers=self.headers,
+        #     json=json_data,
+        #     proxies=check_proxy()
+        # )
+        if response_json.get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始加了用户cookie检测
+            if not len(response_json.get('data')[1:]):
                 print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
                 return {'data': []}
             else:  # {"msg":"登录失效","data":{},"errCode":"1","serverTime":1730814117}
-                return response.json()
+                return response_json
         else:  # {"msg":"","data":{"all":234,"date":"2024-11-05","recommend":18},"errCode":"0","serverTime":1730815441}
-            print(response.json().get('msg'))
-            return response.json().get('msg')
+            print(response_json.get('msg'))
+            return response_json.get('msg')
 
-    def get_jiuyangonshe_data_today(self, time_str):  # 从2024.04.16开始似乎改成API返回数据形式了,后面估计要做反爬.
+    async def get_jiuyangonshe_data_today(self, time_str):  # 从2024.04.16开始似乎改成API返回数据形式了,后面估计要做反爬.
         print(f'正在获取 <{time_str}> 的数据')
-        response = requests.get(f'https://www.jiuyangongshe.com/action/{time_str}', headers=self.headers, proxies=check_proxy())
-        response.encoding = response.apparent_encoding
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f'https://www.jiuyangongshe.com/action/{time_str}', headers=self.headers, proxy=check_proxy()['http']) as response:
+                response_text = await response.text()
+        # response = requests.get(f'https://www.jiuyangongshe.com/action/{time_str}', headers=self.headers, proxies=check_proxy())
+        # response.encoding = response.apparent_encoding
         try:
             script = re.findall(
-            "<script>window.__NUXT__=([^<]+);</script>", response.text)[0].replace('\\u002F', "/")
+            "<script>window.__NUXT__=([^<]+);</script>", response_text)[0].replace('\\u002F', "/")
             data = execjs.eval(script)  # python调用execjs执行方法
             # print(data)
             if not data.get('data')[0].get('allCount'):
@@ -90,8 +102,8 @@ class JYGS:
         except IndexError:
             return
 
-    def get_data_new(self, time_str: str) -> list:
-        data = self.get_jiuyangongshe_data_by_api(time_str)
+    async def get_data_new(self, time_str: str) -> list:
+        data = await self.get_jiuyangongshe_data_by_api(time_str)
         i = 1
         today_str = datetime.date.today()
         past_data = False
@@ -112,10 +124,10 @@ class JYGS:
 
 
 @router.get('/')
-def get_stock_info():  # 目前只能获取当天的数据
+async def get_stock_info():  # 目前只能获取当天的数据
     jygs = JYGS()
-    value = jygs.get_data_new(today)
+    value = await jygs.get_data_new(today)
     if not value:
-        value = jygs.get_data_new(yesterday)
+        value = await jygs.get_data_new(yesterday)
     value = {'searchResults': [{'id': j['name'] + '*' + str(j['count']), 'url_title': j['list']} for j in value]}
     return response_with(resp.SUCCESS_200, value=value)

@@ -30,44 +30,6 @@ def deliver_quotes_to_qiyeweixin(quotes):
     return quote_str
 
 
-# class QuotesCollector:
-#     def __init__(self) -> None:
-#         self.s = requests.Session()
-#         self.quote_main_url = "https://www.azquotes.com"
-#         self.quote_main_url_headers = {
-#             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36'}
-#
-#     def crawl_page(self, page=''):
-#         r = self.s.get(page, headers=self.quote_main_url_headers, proxies=check_proxy())
-#         r.encoding = r.apparent_encoding
-#         return r.text
-#
-#     def get_today_quote(self):
-#         try:
-#             r = self.crawl_page(self.quote_main_url)
-#             html = etree.HTML(r)
-#             quote_today = html.xpath('//div[@class="content-slide content-slide_top"]/p/a[@class="title"]/text()')
-#             quote_author_today = html.xpath(
-#                 '//div[@class="content-slide content-slide_top"]/div[@class="q_user"]/a/text()')
-#             print("今日Quotes获取成功!")
-#             quotes = dict(zip(quote_author_today, quote_today))
-#             return quotes
-#         except:
-#             print("今日Quotes获取失败!")
-#             return
-#
-#     # def deliver_quotes_to_mail(self, quotes):
-#     #     quote_list = []
-#     #     for i in quotes:
-#     #         quote_list.append({i: quotes.get(i)})
-#     #     quote_choice = random.choice(quote_list)
-#     #     print(quote_choice)
-#     #     quote_str = """【Quote of today】<br>{quote}<br><br>--{author}""".format(
-#     #         quote=quote_choice[list(quote_choice.keys())[0]], author=list(quote_choice.keys())[0])
-#     #     mailsender = MailSender()
-#     #     mailsender.sendMail('MacBot', ['saintbcy@163.com'], [], 'Daily Logs Of ' + time.strftime('%Y%m%d'), mailsender.content(quote_str), attachments=[])
-
-
 class AsyncQuotesBot:
     _instance = None
 
@@ -92,10 +54,10 @@ class AsyncQuotesBot:
 
         # async with aiohttp.ClientSession(connector=self.connector) as session:
         if self.proxy:
-            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers,  **kwargs) as response:  # proxy=self.proxy
+            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers,  **kwargs) as response:
                 return await response.text()
         else:
-            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers) as response:  # proxy=self.proxy
+            async with self.session.get(self.quote_main_url, headers=self.quote_main_url_headers) as response:
                 return await response.text()
 
     async def get_today_quote(self):
