@@ -225,13 +225,11 @@
                     <h4><span class="stock-num">{{ result.nickname }} {{ result.vipType }}</span></h4>
                   </div>
                   <h4>{{ result.content }}</h4>
-                  <h4><span class="stock-num">{{ result.extInfo_endpoint.CLIENT_VERSION_STR }}</span>
-                    {{ result.extInfo_endpoint.CLIENT_SIGN }} {{ result.extInfo_endpoint.CHANNEL }}
-                    {{ result.extInfo_endpoint.CLIENT_TYPE }} {{ result.extInfo_endpoint.OS_TYPE }}
-                    {{ result.extInfo_endpoint.OSVER }}</h4>
-                  <!--                  <p>USER_AGENT： {{ result.extInfo_endpoint.USER_AGENT }}</p>-->
-                  <!--                  <p>X_REMOTE_PORT：{{ result.extInfo_endpoint.X_REMOTE_PORT }}</p>-->
-                  <p>ipLocation：{{ result.extInfo_endpoint.IP }}-{{ result.ipLocation.location }}</p>
+<!--                  <h4><span class="stock-num">{{ result.extInfo_endpoint.CLIENT_VERSION_STR }}</span>-->
+<!--                    {{ result.extInfo_endpoint.CLIENT_SIGN }} {{ result.extInfo_endpoint.CHANNEL }}-->
+<!--                    {{ result.extInfo_endpoint.CLIENT_TYPE }} {{ result.extInfo_endpoint.OS_TYPE }}-->
+<!--                    {{ result.extInfo_endpoint.OSVER }}</h4>-->
+<!--                  <p>ipLocation：{{ result.extInfo_endpoint.IP }}-{{ result.ipLocation.location }}</p>-->
                   <p>liked：{{ result.liked }}</p>
                   <p>likedCount：{{ result.likedCount }}</p>
                   <p>time：{{ result.time }}</p>
@@ -249,9 +247,6 @@
                       </div>
                       <h4> {{ sub_result.content }} </h4>
                       <p>ipLocation：{{ getIP() }}-{{ sub_result.ipLocation.location }}</p>
-                      <!--                      <p>涨跌幅：<span style="color: red;">{{ sub_result.article.action_info.shares_range / 100 }} %</span></p>-->
-                      <!--                      <p>涨停时间：{{ sub_result.article.action_info.time }}</p>-->
-                      <!--                      <p>解析：{{ sub_result.article.action_info.expound }}</p>-->
                     </div>
                   </div>
                 </div>
@@ -272,7 +267,8 @@ import { sid_searchComments, sid_searchLyric, sid_searchUrl, pid_searchKeyword, 
 export default {
   data() {
     return {
-      currentView: 'search_songlist_id', // 默认显示搜索结果
+      currentView: 'search_songs_musiccomments',
+      // 'search_songlist_id', // 默认显示搜索结果
       // searchText: '周杰伦', // 绑定在搜索框上的模型
       searchText: '252904283', // 默认歌单id
       song_searchDetail: '1869285', // 默认歌曲id
@@ -286,7 +282,7 @@ export default {
       songid_searchSongLyric: '191060', // 默认歌曲id
       songid_searchSongLyricResult: null,
       songid_searchSongComments: '1913206466', // 默认歌曲id
-      songid_searchSongCommentsResult: []
+      songid_searchSongCommentsResult: null
     }
   },
   computed: {
@@ -295,7 +291,8 @@ export default {
     }
   },
   mounted() {
-    setTimeout(this.onSearchSong(), 500)
+    // setTimeout(this.onSearchSong(), 500)
+    this.onSearchSongComments()
   },
   methods: {
     async onSearch() {
