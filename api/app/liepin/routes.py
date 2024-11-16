@@ -2,7 +2,6 @@
 # from urllib.parse import urljoin, urlparse
 import json
 
-# import requests
 import aiohttp
 # from app import db
 # from app.liepin.models import JobRequest, JobRecommendation
@@ -99,7 +98,6 @@ class liepin_searchjob:
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
                 r_text = await response.text()
-        # r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())  # ,verify=False
         # print(f'状态码: <{r.status_code}>')
         result_ret = json.loads(r_text)  # r.text  #
         print(result_ret)
@@ -113,7 +111,6 @@ class liepin_searchjob:
             async with aiohttp.ClientSession() as session:
                 async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
                     r_text = await response.text()
-            # r = requests.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxies=check_proxy())
             # print(f'状态码: <{r.status_code}>')
             result_next = json.loads(r_text)
             print(result_next)
@@ -219,9 +216,7 @@ class liepin_searchjob:
         async with aiohttp.ClientSession() as session:
             async with session.get(job_link, headers=self.headers, proxy=check_proxy()['http']) as response:
                 r_text = await response.text()
-        # r = requests.get(job_link, headers=self.headers, proxies=check_proxy())
-        # r.encoding = r.apparent_encoding
-        html = etree.HTML(0)
+        html = etree.HTML(r_text)
         try:
             web_title = html.xpath('//head/title/text()')[0]
             job_id = job_link.split('/')[-1].split('.')[0]
@@ -279,12 +274,12 @@ class liepin_searchjob:
 
 
 @router.post('/get_jobs')
-def get_jobs_from_liepinsearch(job_req: JobReq):
+async def get_jobs_from_liepinsearch(job_req: JobReq):
     """
     根据前端筛选条件获取职位
     """
     liepin_job_res = liepin_searchjob(payload=job_req.dict())
-    liepin_job_res = liepin_job_res.get_liepin_searchjobs()  # liepin API返回的职位
+    liepin_job_res = await liepin_job_res.get_liepin_searchjobs()  # liepin API返回的职位
     try:
         value = {'searchResults': [{'id': liepin_job_res.index(j) + 1,
                                     'job_title': j['Job']['job_title'],
@@ -305,12 +300,12 @@ def get_jobs_from_liepinsearch(job_req: JobReq):
 
 
 @router.post('/getJobDetails')
-def getJobDetails(jobDetail: JobDetail):
+async def getJobDetails(jobDetail: JobDetail):
     """根据job URL 返回 job detail
     """
     jobUrl = jobDetail.jobUrl  # 前端请求的参数
     liepin_job_res = liepin_searchjob(payload=jobDetail.payload)
-    jobDetailResult = liepin_job_res.get_job_detail_infos(jobUrl)
+    jobDetailResult = await liepin_job_res.get_job_detail_infos(jobUrl)
     try:
         value = {'searchResults': jobDetailResult}
         return response_with(resp.SUCCESS_200, value=value)
