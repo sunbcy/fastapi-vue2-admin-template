@@ -38,9 +38,10 @@ def check_proxy():
             proxy['https'] = http_proxy
             return proxy
         else:
-            # print("No proxy detected.")
+            print("No proxy detected.")
             return
     else:  # 离线状态
+        print("8.8.8.8:53 not connected!")
         return
 
 
