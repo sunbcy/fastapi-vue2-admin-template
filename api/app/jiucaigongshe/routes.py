@@ -43,6 +43,7 @@ class JYGS:
         self.headers['timestamp'] = current_time
         self.headers['token'] = execjs.compile(open('api_js/jiuyangongshe_api.js', 'r', encoding='utf-8').read()).call('get_token_by_time', current_time)
         async with aiohttp.ClientSession() as session:
+            print(f'代理: {check_proxy()}')
             async with session.post('https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
             cookies=self.cookies,
             headers=self.headers,
