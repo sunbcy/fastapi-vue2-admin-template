@@ -7,6 +7,6 @@
 # @E-mail: saintbcy@163.com
 # @Time: 11月 21, 2024 23:33
 # ---
-from utils import check_proxy
+import check_proxy
 
 print(check_proxy())
