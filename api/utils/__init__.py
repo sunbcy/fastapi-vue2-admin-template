@@ -95,7 +95,7 @@ def check_proxy():
             return proxy
         else:
             # print("No proxy detected.")
-            return {'http': 'http://127.0.0.1:443', 'https': 'http://127.0.0.1:443'}
+            return  # {'http': 'http://127.0.0.1:443', 'https': 'http://127.0.0.1:443'}
     else:  # 离线状态
         return
 

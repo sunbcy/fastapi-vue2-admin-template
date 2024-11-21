@@ -44,12 +44,19 @@ class JYGS:
         self.headers['token'] = execjs.compile(open('api_js/jiuyangongshe_api.js', 'r', encoding='utf-8').read()).call('get_token_by_time', current_time)
         async with aiohttp.ClientSession() as session:
             print(f'代理: {check_proxy()}')
-            async with session.post('https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
-            cookies=self.cookies,
-            headers=self.headers,
-            json=json_data,
-            proxy=check_proxy()['http']) as response:
-                response_json = await response.json()
+            if check_proxy():
+                async with session.post('https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
+                cookies=self.cookies,
+                headers=self.headers,
+                json=json_data,
+                proxy=check_proxy()['http']) as response:
+                    response_json = await response.json()
+            else:
+                async with session.post('https://app.jiuyangongshe.com/jystock-app/api/v1/action/field',
+                cookies=self.cookies,
+                headers=self.headers,
+                json=json_data) as response:
+                    response_json = await response.json()
         if response_json.get('errCode') != '1':  # 2024.11.05发现登录失效了,已经开始加了用户cookie检测
             if not len(response_json.get('data')[1:]):
                 print(f'    当天异动分析数据为空!查询上一个交易日数据分析结果.')
