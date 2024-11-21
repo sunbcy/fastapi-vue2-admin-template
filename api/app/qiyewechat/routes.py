@@ -43,7 +43,10 @@ class QiYeWeChatBot:
             para = {'msgtype': 'text',
                     'text': {'content': decoded_msg}}
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         if res.status_code == 200:
             print('消息发送成功!')
         else:
@@ -68,7 +71,10 @@ class QiYeWeChatBot:
             para = {'msgtype': 'markdown',
                     'markdown': {'content': msg}}
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         print(res.status_code)
         return res.text
 
@@ -95,7 +101,10 @@ class QiYeWeChatBot:
                 }
             }
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         print(res.status_code)
         return res.text
 
@@ -134,7 +143,10 @@ class QiYeWeChatBot:
                 }
             }
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         print(res.status_code)
         return res.text
 
@@ -159,7 +171,10 @@ class QiYeWeChatBot:
                     }
                 }
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         print(res.status_code)
         return res.text
 
@@ -184,7 +199,10 @@ class QiYeWeChatBot:
                     }
                 }
         # print(self.wechat_url+self.key)
-        res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            res = requests.post(self.wechat_url+self.key, data=json.dumps(para), headers=headers, proxies=check_proxy())
+        else:
+            res = requests.post(self.wechat_url + self.key, data=json.dumps(para), headers=headers)
         print(res.status_code)
         return res.text
 

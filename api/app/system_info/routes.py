@@ -78,7 +78,10 @@ def get_wan_ip():
     # 获取公共 IP 地址
     ip_api_url = "https://api.ipify.org?format=json"
     try:
-        response = requests.get(ip_api_url, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            response = requests.get(ip_api_url, proxies=check_proxy())
+        else:
+            response = requests.get(ip_api_url)
         ip = response.json()['ip']
         return ip
     except requests.exceptions.ProxyError:
@@ -96,7 +99,10 @@ def get_position(ips):
     # 使用 ipinfo 服务获取地理位置信息
     location_api_url = f"https://ipinfo.io/{ips}/json"
     try:
-        location_response = requests.get(location_api_url, proxies=check_proxy())
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            location_response = requests.get(location_api_url, proxies=check_proxy())
+        else:
+            location_response = requests.get(location_api_url)
         location_data = location_response.json()
 
         # 解析位置数据
@@ -120,7 +126,10 @@ def get_ip_info(ip=None):
     url = 'http://cip.cc'  # 免费的IP查询地址  会失效,502
     url = f"{url}/{ip}" if ip else f'{url}'
     headers = Headers(headers=True).generate()
-    html = requests.get(url, headers=headers, proxies=check_proxy())
+    if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+        html = requests.get(url, headers=headers, proxies=check_proxy())
+    else:
+        html = requests.get(url, headers=headers)
     html.encoding = html.apparent_encoding
     # print(html.text)
     soup = BeautifulSoup(html.text, 'html.parser')

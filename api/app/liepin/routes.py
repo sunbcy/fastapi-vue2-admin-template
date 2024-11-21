@@ -96,8 +96,12 @@ class liepin_searchjob:
     async def get_liepin_searchjobs(self):
         print(f"当前访问第 {self.payload['data']['mainSearchPcConditionForm']['currentPage'] + 1} 页")
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
-                r_text = await response.text()
+            if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+                async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
+                    r_text = await response.text()
+            else:
+                async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload) as response:
+                    r_text = await response.text()
         # print(f'状态码: <{r.status_code}>')
         result_ret = json.loads(r_text)  # r.text  #
         print(result_ret)
@@ -109,8 +113,12 @@ class liepin_searchjob:
             self.payload['data']['mainSearchPcConditionForm']['currentPage'] += 1
             print(f"当前访问第 {self.payload['data']['mainSearchPcConditionForm']['currentPage'] + 1} 页")
             async with aiohttp.ClientSession() as session:
-                async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
-                    r_text = await response.text()
+                if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+                    async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload, proxy=check_proxy()['http']) as response:
+                        r_text = await response.text()
+                else:
+                    async with session.post(self.url, headers=self.headers, cookies=self.cookies, json=self.payload) as response:
+                        r_text = await response.text()
             # print(f'状态码: <{r.status_code}>')
             result_next = json.loads(r_text)
             print(result_next)
@@ -214,8 +222,12 @@ class liepin_searchjob:
             'sec-ch-ua-platform': '"macOS"',
         }
         async with aiohttp.ClientSession() as session:
-            async with session.get(job_link, headers=self.headers, proxy=check_proxy()['http']) as response:
-                r_text = await response.text()
+            if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+                async with session.get(job_link, headers=self.headers, proxy=check_proxy()['http']) as response:
+                    r_text = await response.text()
+            else:
+                async with session.get(job_link, headers=self.headers) as response:
+                    r_text = await response.text()
         html = etree.HTML(r_text)
         try:
             web_title = html.xpath('//head/title/text()')[0]

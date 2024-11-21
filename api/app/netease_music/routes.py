@@ -59,8 +59,12 @@ class GetMusicCommentsParams(BaseModel):
 async def download_song(url, songname):  # 无法下载VIP
     print(f'正在下载 <{songname}>')
     async with aiohttp.ClientSession() as session:
-        async with session.get(url, proxys=check_proxy()['http']) as response:
-            res_cnt = await response.content
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.get(url, proxy=check_proxy()['http']) as response:
+                res_cnt = await response.content
+        else:
+            async with session.get(url) as response:
+                res_cnt = await response.content
     with open(f'{songname}.mp3', 'wb') as f:
         f.write(res_cnt)
 
@@ -69,8 +73,12 @@ async def download_song_by_id(song_id, songname):  # 也不可以下载VIP歌曲
     print(f'正在下载 <{songname}>-<{song_id}>')
     url = f'http://music.163.com/song/media/outer/url?id={song_id}'
     async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers, proxy=check_proxy()['http']) as response:
-            music_text, music_cnt = await response.text(), response.content
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.get(url, headers=headers, proxy=check_proxy()['http']) as response:
+                music_text, music_cnt = await response.text(), response.content
+        else:
+            async with session.get(url, headers=headers) as response:
+                music_text, music_cnt = await response.text(), response.content
     if '很抱歉，你要查找的网页找不到' in music_text and '404' in music_text:
         print(f'<{songname}>-<{song_id}> 未找到源地址')
     else:
@@ -85,11 +93,17 @@ async def get_musicurl_by_songid(songid):
         'encSecKey': key_data.get('encSecKey'),
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/song/enhance/player/url/v1',
-        headers=headers,
-        data=data,
-        proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/song/enhance/player/url/v1',
+            headers=headers,
+            data=data,
+            proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/song/enhance/player/url/v1',
+            headers=headers,
+            data=data) as response:
+                res_text = await response.text()
     # response = requests.post(
     #     'https://music.163.com/weapi/song/enhance/player/url/v1',
     #     headers=headers,
@@ -109,8 +123,12 @@ async def get_lyric_by_songid(songid):  # /weapi/song/lyric
         'encSecKey': key_data.get('encSecKey'),
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/song/lyric', headers=headers, data=data, proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/song/lyric', headers=headers, data=data, proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/song/lyric', headers=headers, data=data) as response:
+                res_text = await response.text()
     # response = requests.post('https://music.163.com/weapi/song/lyric', headers=headers, data=data, proxies=check_proxy())
     data = json.loads(res_text)
     return data['lrc']['lyric']
@@ -123,8 +141,12 @@ async def get_comments_by_songid(songid):  # "pageSize":"1000"--js default --> 1
         'encSecKey': key_data.get('encSecKey'),
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/comment/resource/comments/get', headers=headers, data=data, proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/comment/resource/comments/get', headers=headers, data=data, proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/comment/resource/comments/get', headers=headers, data=data) as response:
+                res_text = await response.text()
     # response = requests.post('https://music.163.com/weapi/comment/resource/comments/get', headers=headers, data=data, proxies=check_proxy())
     data = json.loads(res_text)
     # print(data)
@@ -140,8 +162,12 @@ async def get_playlists_by_userid(userid):
     # 歌单全部评论链接
     # response = requests.post('https://music.163.com/weapi/comment/resource/comments/get', headers=headers, data=data)
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/user/playlist', headers=headers, data=data, proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/user/playlist', headers=headers, data=data, proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/user/playlist', headers=headers, data=data) as response:
+                res_text = await response.text()
     # response = requests.post('https://music.163.com/weapi/user/playlist', headers=headers, data=data, proxies=check_proxy())
     # https://music.163.com/weapi/comment/resource/comments/get
     data = json.loads(res_text)
@@ -160,11 +186,17 @@ async def get_songs_by_playlistid(playlistid):
         'encSecKey': key_data.get('encSecKey'),
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/v6/playlist/detail',
-        headers=headers,
-        data=data,
-        proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/v6/playlist/detail',
+            headers=headers,
+            data=data,
+            proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/v6/playlist/detail',
+            headers=headers,
+            data=data) as response:
+                res_text = await response.text()
     all_data = json.loads(res_text)
     play_list = all_data['playlist']['tracks']
     all_track_ids = all_data['playlist']['trackIds']
@@ -178,11 +210,17 @@ async def get_song_detail_by_id(songid):
         'encSecKey': key_data.get('encSecKey'),
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post('https://music.163.com/weapi/v3/song/detail',
-        headers=headers,
-        data=data,
-        proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post('https://music.163.com/weapi/v3/song/detail',
+            headers=headers,
+            data=data,
+            proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post('https://music.163.com/weapi/v3/song/detail',
+            headers=headers,
+            data=data) as response:
+                res_text = await response.text()
     # response = requests.post(
     #     'https://music.163.com/weapi/v3/song/detail',
     #     headers=headers,
@@ -212,12 +250,19 @@ async def cloud_search_keyword(keyword):  # 测试搜索最多一次100首
     # }
 
     async with aiohttp.ClientSession() as session:
-        async with session.post(# cookies=cookies,
-        # params=params,
-        headers=headers,
-        data=data,
-        proxy=check_proxy()['http']) as response:
-            res_text = await response.text()
+        if check_proxy():  # 如果是安卓情况下,check_proxy()可能检测不到代理端口故此多个判断.
+            async with session.post(# cookies=cookies,
+            # params=params,
+            headers=headers,
+            data=data,
+            proxy=check_proxy()['http']) as response:
+                res_text = await response.text()
+        else:
+            async with session.post(# cookies=cookies,
+            # params=params,
+            headers=headers,
+            data=data) as response:
+                res_text = await response.text()
     # response = requests.post(
     #     'https://music.163.com/weapi/cloudsearch/get/web',
     #     # cookies=cookies,
